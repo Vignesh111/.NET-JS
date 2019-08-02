@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewBag.Title = "SelectDegree";
+}
+
+@using System.Data;
+@using System.Web.UI.WebControls;
+@using System.Web.Script.Serialization;
+@{
+    // Gets the data from the session object and stores it in 'degrees'
+    JavaScriptSerializer javaSerial = new JavaScriptSerializer();
+    if (Session["returnedJSON"] == null)
+    {
+        return;
+    }
+    var degrees = Session["returnedJSON"].ToString();
+}
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        // Gets the data from degrees
+        var dgree = @Html.Raw(javaSerial.Serialize(degrees));
+
+        // Converts data into usable JSON
+        var degreeJSON = JSON.parse(dgree);
+        console.log(degreeJSON);
+
+        // CREATE CODE TO DISPLAY AN ACCORDION WITH EITHER THE UNDERGRADUATE OR GRADUATE PROGRAM DATA DEPENDING ON WHICH IS RETURNED IN THE PARSED JSON
+        
+
+        $("#accordion").accordion({
+            collapsible: true,
+            heightStyle: "content"
+        });
+    });
+</script>
+
+<h2 id="h2ID"></h2>
+<div id="accordion"></div>
+
+

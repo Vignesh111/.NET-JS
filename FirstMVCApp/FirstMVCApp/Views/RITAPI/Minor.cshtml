@@ -1,0 +1,84 @@
+﻿@{
+    ViewBag.Title = "Minor";
+}
+
+@using System.Data;
+@using System.Web.UI.WebControls;
+@using System.Web.Script.Serialization;
+@{
+     JavaScriptSerializer javaSerial = new JavaScriptSerializer();
+    if (Session["returnedJSON"] == null)
+    {
+        return;
+    }
+    var minorspage = Session["returnedJSON"].ToString();
+
+}
+
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+
+ $(document).ready(function () {
+     var minors = @Html.Raw(javaSerial.Serialize(minorspage));
+
+
+     
+
+     var MinorsJSON = JSON.parse(minors);
+
+    
+
+     $.each(MinorsJSON.UgMinors, function (i, item) {
+
+
+         $('#hdr' + i).html("<p style='font-weight: bold; font-size: x-large;'>" + item.title + "</p>");
+         var textString = "<ul style='font-style: italic;'>";
+
+         textString += '<p> ' + item.description + '</p>';
+
+
+
+         for (j = 0; j < item.courses.length; j++) {
+             textString = textString + ("<li>" + item.courses[j] + "</li>" ) ;
+         }
+
+         textString += '<p> ' + item.note + '</p>';
+
+
+         textString = textString + "</ul>";
+         $('#div' + i).html(textString);
+
+        
+         $("#accordion").accordion({
+            collapsible: true,
+            heightStyle: "content"
+        });
+
+     });
+
+
+
+
+    });
+</script>
+
+<div id="accordion">
+    <h3 id="hdr0"></h3>
+    <div id="div0"></div>
+
+    <h3 id="hdr1"></h3>
+    <div id="div1"></div>
+    <h3 id="hdr2"></h3>
+    <div id="div2"></div>
+    <h3 id="hdr3"></h3>
+    <div id="div3"></div>
+    <h3 id="hdr4"></h3>
+    <div id="div4"></div>
+    <h3 id="hdr5"></h3>
+    <div id="div5"></div>
+    <h3 id="hdr6"></h3>
+    <div id="div6"></div>
+    <h3 id="hdr7"></h3>
+    <div id="div7"></div>
+
+</div>

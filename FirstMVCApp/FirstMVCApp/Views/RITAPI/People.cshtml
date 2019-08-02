@@ -1,0 +1,110 @@
+﻿@{
+    ViewBag.Title = "People";
+}
+
+@using System.Data;
+@using System.Web.UI.WebControls;
+@using System.Web.Script.Serialization;
+@{
+    JavaScriptSerializer javaSerial = new JavaScriptSerializer();
+    if (Session["returnedJSON"] == null)
+    {
+        return;
+    }
+
+    var People = Session["returnedJSON"].ToString();
+
+}
+<style>
+    .box {
+    background-color: rgb(234, 140, 46);
+    display: inline-block;
+    height: 150px;
+    width: 300px;
+    margin: 20px;
+    border: 2px solid rgb(5, 111, 155);
+}
+
+.box:hover {
+    background-color: rgba(234, 140, 46, 0.6);
+}
+
+#ContainerP{
+    text-align:center;
+}
+
+</style>
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var people = @Html.Raw(javaSerial.Serialize(People));
+        var peopleJSON = JSON.parse(people);
+        
+        $('#pop').dialog({
+        modal: true,
+        autoOpen: false
+      });
+
+         $('#ContainerP').append("<h1>" +peopleJSON.title+ "</h1>");
+         $('#ContainerP').append("<h2>" + peopleJSON.subTitle + "<h2>");
+        
+
+        $.each(peopleJSON.faculty, function (i, item) {
+            var box = '<div class="box"><h2>' + item.name + '</h2><p>' + item.title + '</p></div>';
+            $('#ContainerP').append(box);
+          
+        });
+
+         $.each(peopleJSON.staff, function (i, item) {
+            var box = '<div class="box"><h2>' + item.name + '</h2><p>' + item.title + '</p></div>';
+            $('#ContainerP').append(box);
+          
+        });
+
+       
+         $('.box').each(function(i) {
+        this.onclick = function() { openBox(i) };
+         });
+
+        function openBox(index) {
+           var person;
+
+ 
+         if (index > 33) {
+              person = peopleJSON.staff[index - 34];
+         } else {
+              person = peopleJSON.faculty[index];
+         }
+
+  
+         $('#pop').empty();
+
+  
+          $('#pop').dialog({
+            title: person.name
+          });
+
+  
+          $('#pop').append('<img src="' +person.imagePath+ '"></img>');
+
+  
+          $('#pop').append('<p>Title: '+person.title+ '</p><p>Email: ' +person.email+ '</p><p>Office: ' +person.office+ '</p><p>Phone: ' +person.phone+ '</p><p>Username: ' +person.username+ '</p><p>Other titles: '+person.tagline+'</p>');
+
+  
+          $('#pop').dialog("open");
+        }
+
+
+        
+
+    });
+
+
+    
+  
+</script>
+
+    <div class="container" id="ContainerP">
+        <div id="pop"></div>
+    </div>

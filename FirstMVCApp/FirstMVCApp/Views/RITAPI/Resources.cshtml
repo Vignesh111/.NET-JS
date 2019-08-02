@@ -1,0 +1,260 @@
+﻿@{
+    ViewBag.Title = "Resources";
+}
+
+@using System.Data;
+@using System.Web.UI.WebControls;
+@using System.Web.Script.Serialization;
+@{
+    JavaScriptSerializer javaSerial = new JavaScriptSerializer();
+    if (Session["returnedJSON"] == null)
+    {
+        return;
+    }
+    
+    var Resources = Session["returnedJSON"].ToString();
+
+}
+<style>
+</style>
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+       
+        var resources = @Html.Raw(javaSerial.Serialize(Resources));
+
+        $("#studyAbroad").accordion({
+            collapsible: true,
+            heightStyle: "content",
+
+        });
+
+
+        $("#studentServices").accordion({
+            collapsible: true,
+            heightStyle: "content",
+
+        });
+
+
+        $("#tutorsAndLabInformation").accordion({
+            collapsible: true,
+            heightStyle: "content",
+
+        });
+
+        $("#studentAmbassadors").accordion({
+            collapsible: true,
+            heightStyle: "content",
+
+        });
+
+        $("#forms").accordion({
+            collapsible: true,
+            heightStyle: "content",
+
+        });
+
+        $("#coopEnrollment").accordion({
+            collapsible: true,
+            heightStyle: "content",
+
+        });
+
+
+        var resourcesJSON = JSON.parse(resources);
+
+        create(resourcesJSON);
+
+
+        createStudyAbroad(resourcesJSON.studyAbroad);
+        createstudentServices(resourcesJSON.studentServices);
+
+        createtutorsAndLabInformation(resourcesJSON.tutorsAndLabInformation);
+        createstudentAmbassadors(resourcesJSON.studentAmbassadors);
+        createforms(resourcesJSON.forms);
+        createcoopEnrollment(resourcesJSON.coopEnrollment);
+
+    });
+
+
+    function create(data1) {
+        var htmlString10 = "";
+        htmlString10 += "<h3>" + data1.title + "</h3>";
+        htmlString10 += "<h3>" + data1.subTitle + "</h3>";
+
+
+
+        $('#title').append(htmlString10);
+
+    }
+    function createStudyAbroad(data2) {
+
+
+
+
+        var htmlString2 = "";
+        var htmlString3 = "";
+        // String to hold html content
+        htmlString3 += "<h5>" + data2.title + "</h5>";
+        htmlString2 += "<h5>" + data2.description + "</h5>";
+        // Creates a header for the title
+
+        // Creates a header and paragraph for each individual title and description pair
+        $.each(data2.places, function (i, item) {
+            htmlString2 += '<h5>' + this.nameOfPlace + '</h5>';
+            htmlString2 += '<div>' + this.description + '</div>';
+        });
+
+        console.log($(data2));
+        // Appends html to the div
+        $('#d').append(htmlString2);
+        $('#h').append(htmlString3);
+    }
+
+    function createstudentServices(data3) {
+
+
+        var htmlString4 = "";
+        var htmlString5 = "";
+
+
+        htmlString4 += '<a href="#ca-3">' + data3.title + '</a>';
+        htmlString5 += '<div class = "resource_subtitle">' + data3.academicAdvisors.title + '</div>';
+        htmlString5 += '<div>' + data3.academicAdvisors.description + '</div>';
+        var link_ = data3.academicAdvisors.faq.contentHref;
+        htmlString5 += '<a href="' + link_ + '">' + data3.academicAdvisors.faq.title + '</a>';
+        htmlString5 += '</div>';
+
+        htmlString5 += '<div class = "resources_subdiv">';
+        htmlString5 += '<div class = "resource_subtitle">' + data3.professonalAdvisors.title + '</div>';
+        $.each(data3.professonalAdvisors.advisorInformation, function (i, item) {
+            htmlString5 += '<div>' + this.name + '</div>';
+            htmlString5 += '<div>' + this.department + '</div>';
+            htmlString5 += '<div>' + this.email + '</div>';
+
+        });
+
+        console.log($(data3));
+        // Appends html to the div
+        $('#dd').append(htmlString5);
+        $('#hh').append(htmlString4);
+    }
+
+
+    function createtutorsAndLabInformation(data4) {
+
+
+        var htmlString6 = "";
+        var htmlString7 = "";
+
+        htmlString6 += '<a href="#ca-3">' + data4.title + '</a>';
+        htmlString7 += '<div>' + data4.description + '</div>';
+        link_ = data4.tutoringLabHoursLink;
+        htmlString7  += '<a href="' + link_ + '">Tutoring Lab Hours Link</a>';
+
+        htmlString7  += '</div>';
+
+
+
+        console.log($(data4));
+        // Appends html to the div
+        $('#ddd').append(htmlString7);
+        $('#hhh').append(htmlString6);
+    }
+    function createstudentAmbassadors(data5) {
+
+
+        var htmlString9 = "";
+        var htmlString8 = "";
+
+        htmlString8 += '<a href="#ca-3">' + data5.title + '</a>';
+        htmlString9 += '<img src="' + data5.ambassadorsImageSource + '"></br>';
+
+        $.each(data5.subSectionContent, function (i, item) {
+            htmlString9 += '<div class = "resource_subtitle">' + item.title + '</div>';
+            htmlString9 += '<div>' + item.description + '</div>';
+        });
+        link_ = data5.applicationFormLink;
+        htmlString9 += '<a   href="' + link_ + '">Application Form Link</a>';
+        htmlString9 += '<div>' + data5.note + '</div>'
+
+
+        console.log($(data5));
+        // Appends html to the div
+        $('#dddd').append(htmlString9);
+        $('#hhhh').append(htmlString8);
+    }
+
+    function createforms(data6) {
+
+
+
+        var htmlString10 = "";
+
+
+
+
+        $.each(data6.graduateForms, function (i, item) {
+            link_ = item.href;
+            if (i == 1 || i == 0) {
+                htmlString10 += '<li><a href="' + link_ + '">' + item.formName + '</a></li>';
+            }
+            else {
+                htmlString10 += '<li><a href="http://ist.rit.edu/index.php">' + item.formName + '</a></li>';
+            }
+        });
+        console.log($(data6));
+        // Appends html to the div
+        $('#de').append(htmlString10);
+        $('#he').append('<h4>Forms</h4>');
+    }
+
+
+    function createcoopEnrollment(data7) {
+
+
+        var htmlString12 = "";
+        var htmlString13 = "";
+
+        htmlString12 += '<div class = "resource_subtitle">' + data7.title + '</div>';
+        $.each(data7.enrollmentInformationContent, function (i, item) {
+            htmlString13 += '<div class = "resource_subtitle">' + item.title + '</div>';
+            htmlString13 += '<div>' + item.description + '</div>';
+        });
+
+
+        link_ = data7.RITJobZoneGuidelink;
+        htmlString13 += '<a   href="' + link_ + '">RIT Job Zone Guide link</a>';
+
+        console.log($(data7));
+        // Appends html to the div
+        $('#da' ).append(htmlString13);
+        $('#ha' ).append(htmlString12);
+    }
+</script>
+
+<h2 id="title"></h2>
+<h2 id="subtitle"></h2>
+
+
+<div id="studyAbroad">
+    <h3 id="h"></h3><div id="d"></div>
+</div>
+<div id="studentServices">
+    <h3 id="hh"></h3><div id="dd"></div>
+</div>
+<div id="tutorsAndLabInformation">
+    <h3 id="hhh"></h3><div id="ddd"></div>
+</div>
+<div id="studentAmbassadors">
+    <h3 id="hhhh"></h3><div id="dddd"></div>
+</div>
+<div id="forms">
+    <h3 id="he"></h3><div id="de"></div>
+</div>
+
+<div id="coopEnrollment">
+    <h3 id="ha"></h3><div id="da"></div>
+
+</div>
